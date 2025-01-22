@@ -1,7 +1,36 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+    /*margin: auto;*/
+    background-color: black;
 }
+
+div.Header {
+  border: 1px solid white;
+  display:list-item;
+}
+
+
+div.Header button.Exit {
+  background-color: red;
+  float: right;
+  cursor: pointer;
+}
+navbar {
+  border: 1px solid white;
+  display:list-item;
+}
+
+
+navbar.horizontal button.Exit {
+  background-color: red;
+  float: right;
+  cursor: pointer;
+}
+navbar.vertical button.Exit {
+  background-color: red;
+  float: right;
+  cursor: pointer;
+}
+
+
