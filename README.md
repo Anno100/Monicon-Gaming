@@ -22,7 +22,7 @@ Hier kannst du ein Desktop nach deinen Vorlieben kreieren, im Internet surfen so
 
 
 ## Spiele
--
+- Snake: Steuerung per Pfeiltasten oder WASD Tasten.
 
 ## Anwendungen
 -
