@@ -1,8 +1,10 @@
 import { Snake } from './Snake';
+import { Pong } from './Pong';
 
 const openGame = (game: string) => {
     switch(game){
         case 'Snake': Snake.run(); break;
+        case 'Pong': Pong.run(); break;
         default: console.log('Game not found');
     }
 }

@@ -1,4 +1,5 @@
-
+import { Canvas } from './Canvas';
+import { Game } from './Game';
 import { Rect } from './Rect';
 
 enum Direction {
@@ -8,130 +9,136 @@ enum Direction {
     down
 }
 
+enum Control {
+    ArrowUp = 'ArrowUp',
+    ArrowLeft = 'ArrowLeft',
+    ArrowDown = 'ArrowDown',
+    ArrowRight = 'ArrowRight',
+    w = 'w',
+    a = 'a',
+    s = 's',
+    d = 'd'
+}
+
 class Snake_Rect extends Rect {
     constructor(x: number, y: number) {
-        super(x, y, 10,10, 'black');
+        super(x, y, 10, 10, 'black');
     }
 }
 
-let I:NodeJS.Timeout;
-
-let Objects:Rect[] = [];
-
-export class Snake {
-    g: CanvasRenderingContext2D;
-    length: number;
-    head: Rect;
-    direction: Direction;
-    body: Rect[];
+export class Snake extends Game {
+    head!: Snake_Rect;
+    direction!: Direction;
+    body: Rect[] = [];
+    food = new Rect(Infinity, Infinity, 10, 10, 'red');
     static highScore: number = 0;
+
     constructor(g: CanvasRenderingContext2D) {
-        this.g = g;
-        this.g.fillStyle = 'black';
-        this.length = 1;
-
-        
-        this.head = new Snake_Rect(0, 0);
-        Objects.push(this.head);
-
-        this.body = [this.head];
-
-        let food = new Rect(300, 300, 10, 10, 'red');
-        Objects.push(food);
-
-        this.direction = Direction.right;
-
-        document.body.onkeydown = (e) => {
-            switch (e.key) {
-                case 'ArrowUp':
-                case 'w': if(this.direction != Direction.down) this.direction = Direction.up; break;
-                case 'ArrowLeft':
-                case 'a': if(this.direction != Direction.right) this.direction = Direction.left; break;
-                case 'ArrowDown':
-                case 's': if(this.direction != Direction.up) this.direction = Direction.down; break;
-                case 'ArrowRight':
-                case 'd': if(this.direction != Direction.left) this.direction = Direction.right; break;
-            }
-        }
-
-        I = setInterval(() => {
-
-            for (let i = this.body.length - 1; i > 0; i--) {
-                this.body[i].x = this.body[i - 1].x;
-                this.body[i].y = this.body[i - 1].y;
-            }
-
-
-            switch (this.direction) {
-                case Direction.up: this.head.y -= this.head.width; break;
-                case Direction.down: this.head.y += this.head.width; break;
-                case Direction.left: this.head.x -= this.head.width; break;
-                case Direction.right: this.head.x += this.head.width; break;
-            }
-
-            if(this.head.x > this.g.canvas.width / 2) this.head.x = -this.g.canvas.width / 2;
-            if(this.head.x < -this.g.canvas.width / 2) this.head.x = this.g.canvas.width / 2;
-            if(this.head.y > this.g.canvas.height / 2) this.head.y = -this.g.canvas.height / 2;
-            if(this.head.y < -this.g.canvas.height / 2) this.head.y = this.g.canvas.height / 2;
-
-            for (let i = 1; i < this.body.length; i++) {
-                if (this.head.overlap(this.body[i])) {
-                    Snake.highScore = Math.max(Snake.highScore, this.length-1);
-                    this.length = 1;
-                    alert( 'Game Over');
-                    Snake.run();
-                }
-            }
-
-            
-
-            if(food.overlap(this.head)) {
-                this.length++;
-                let r = new Snake_Rect(-Infinity, -Infinity);
-                this.body.push(r);
-                Objects.push(r);
-                food.x = this.g.canvas.width*(Math.random()- 0.5);
-                food.y = this.g.canvas.height*(Math.random()- 0.5);
-            }
-
-            this.g.clearRect(-this.g.canvas.width / 2, -this.g.canvas.height / 2, this.g.canvas.width, this.g.canvas.height);
-            Objects.forEach(o => o.draw(this.g));
-            this.g.fillStyle = 'black';
-            this.g.font = '30px Arial';
-            this.g.fillText('Score: ' + (this.length-1), -this.g.canvas.width / 2 + 10, -this.g.canvas.height / 2 + 30);
-            this.g.fillText('High Score: ' + Snake.highScore, -this.g.canvas.width / 2 + 10, -this.g.canvas.height / 2 + 60);
-
-            console.log(this.body);
-        }, 50);
+        super(g, 50);
+        this.initializeGame();
+        this.setupControls();
     }
 
+    private initializeGame() {
+        this.g.fillStyle = 'black';
+        this.g.font = '30px Arial';
+        clearInterval(Snake.I);
+        this.head = new Snake_Rect(0, 0);
+        this.objects.push(this.head);
+        this.body = [this.head];
+        this.respawnFood();
+        this.objects.push(this.food);
+        this.direction = Direction.right;
+    }
 
+    private setupControls() {
+        document.body.onkeydown = (e) => {
+            switch (e.key) {
+                case Control.ArrowUp:
+                case Control.w: if (this.direction !== Direction.down) this.direction = Direction.up; break;
+                case Control.ArrowLeft:
+                case Control.a: if (this.direction !== Direction.right) this.direction = Direction.left; break;
+                case Control.ArrowDown:
+                case Control.s: if (this.direction !== Direction.up) this.direction = Direction.down; break;
+                case Control.ArrowRight:
+                case Control.d: if (this.direction !== Direction.left) this.direction = Direction.right; break;
+            }
+        };
+    }
 
+    Update = () => {
+        this.moveBody();
+        this.moveHead();
+        this.checkCollisions();
+        this.checkFoodCollision();
+    }
 
+    private moveBody() {
+        for (let i = this.body.length - 1; i > 0; i--) {
+            this.body[i].x = this.body[i - 1].x;
+            this.body[i].y = this.body[i - 1].y;
+        }
+    }
 
+    private moveHead() {
+        switch (this.direction) {
+            case Direction.up: this.head.y -= this.head.width; break;
+            case Direction.down: this.head.y += this.head.width; break;
+            case Direction.left: this.head.x -= this.head.width; break;
+            case Direction.right: this.head.x += this.head.width; break;
+        }
 
+        if (this.head.x > this.g.canvas.width / 2) this.head.x = -this.g.canvas.width / 2;
+        if (this.head.x < -this.g.canvas.width / 2) this.head.x = this.g.canvas.width / 2;
+        if (this.head.y > this.g.canvas.height / 2) this.head.y = -this.g.canvas.height / 2;
+        if (this.head.y < -this.g.canvas.height / 2) this.head.y = this.g.canvas.height / 2;
+    }
 
+    private checkCollisions() {
+        this.body
+            .slice(1)
+            .forEach(r => {
+                if (this.head.overlap(r)) {
+                    Snake.highScore = Math.max(Snake.highScore, this.body.length - 1);
+                    alert('Game Over');
+                    new Snake(this.g);
+                }
+
+            });
+    }
+
+    private checkFoodCollision() {
+        if (this.food.overlap(this.head)) {
+            this.addTail();
+            this.respawnFood();
+        }
+    }
+
+    addTail = () => {
+        let r = new Snake_Rect(-Infinity, -Infinity);
+        this.body.push(r);
+        this.objects.push(r);
+    }
+
+    Draw = () => {
+        this.g.clearRect(-this.g.canvas.width / 2, -this.g.canvas.height / 2, this.g.canvas.width, this.g.canvas.height);
+        this.objects.forEach(o => o.draw(this.g));
+        this.g.fillStyle = 'black';
+        this.g.font = '30px Arial';
+        this.g.fillText('Score: ' + (this.body.length - 1), -this.g.canvas.width / 2 + 10, -this.g.canvas.height / 2 + 30);
+        this.g.fillText('High Score: ' + Snake.highScore, -this.g.canvas.width / 2 + 10, -this.g.canvas.height / 2 + 60);
+    }
+
+    private respawnFood = () => {
+        this.food.x = this.g.canvas.width * (Math.random() - 0.5);
+        this.food.y = this.g.canvas.height * (Math.random() - 0.5);
+    }
 
     static run() {
         const mainElement = document.querySelector('main') as HTMLElement;
-        mainElement.innerHTML = '';
-        clearInterval(I);
-        Objects = [];
-        let c = createFittingCanvas(mainElement);
+        let c = Canvas.create(mainElement);
         let g = c.getContext('2d') as CanvasRenderingContext2D;
         g.translate(c.width / 2, c.height / 2);
-
-
         new Snake(g);
-
-
     }
-}
-function createFittingCanvas(parent: HTMLElement, backgroundColor = 'white') {
-    let c = document.createElement('canvas');
-    parent.appendChild(c);
-    c.style.backgroundColor = backgroundColor;
-    c.height = Number(parent.style.height.replace('px', ''));
-    c.width = Number(parent.style.width.replace('px', ''));
-    return c;
 }

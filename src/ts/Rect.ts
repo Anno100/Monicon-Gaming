@@ -1,15 +1,12 @@
-export class Rect {
-    x: number;
-    y: number;
+import { GameObject } from "./GameObject";
+
+export class Rect extends GameObject{
     width: number;
     height: number;
-    color: string;
-    constructor(x:number, y:number, width:number, height:number, color = 'black'){ 
-        this.x = x;
-        this.y = y;
+    constructor(x:number=Infinity, y:number=Infinity, width:number=0, height:number=0, color = 'black'){ 
+        super(x,y,color)
         this.width = width;
         this.height = height;
-        this.color = color;
     }
     overlap(r:Rect){
         return this.x + this.width/2 > r.x - r.width/2 &&

@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rect = void 0;
-class Rect {
-    constructor(x, y, width, height, color = 'black') {
-        this.x = x;
-        this.y = y;
+const GameObject_1 = require("./GameObject");
+class Rect extends GameObject_1.GameObject {
+    constructor(x = Infinity, y = Infinity, width = 0, height = 0, color = 'black') {
+        super(x, y, color);
         this.width = width;
         this.height = height;
-        this.color = color;
     }
     overlap(r) {
         return this.x + this.width / 2 > r.x - r.width / 2 &&

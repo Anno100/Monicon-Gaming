@@ -2,10 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Boot = void 0;
 const Snake_1 = require("./Snake");
+const Pong_1 = require("./Pong");
 const openGame = (game) => {
     switch (game) {
         case 'Snake':
             Snake_1.Snake.run();
+            break;
+        case 'Pong':
+            Pong_1.Pong.run();
             break;
         default: console.log('Game not found');
     }
