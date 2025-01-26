@@ -9,13 +9,13 @@ export class Rect extends GameObject{
         this.height = height;
     }
     overlap(r:Rect){
-        return this.x + this.width/2 > r.x - r.width/2 &&
-            this.x - this.width/2 < r.x + r.width/2 &&
-            this.y + this.height/2 > r.y - r.height/2 &&
-            this.y - this.height/2 < r.y + r.height/2
+        return this.X + this.width/2 > r.X - r.width/2 &&
+            this.X - this.width/2 < r.X + r.width/2 &&
+            this.Y + this.height/2 > r.Y - r.height/2 &&
+            this.Y - this.height/2 < r.Y + r.height/2
     }
     draw(g:CanvasRenderingContext2D){
         g.fillStyle = this.color;
-        g.fillRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height);
+        g.fillRect(this.X-this.width/2, this.Y-this.height/2, this.width, this.height);
     }
 }

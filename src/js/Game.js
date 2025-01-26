@@ -10,14 +10,16 @@ class Game {
             this.g.fillText('Not implemented', 0, 0);
         };
         this.g = g;
-        clearInterval(Game.I);
-        setInterval(() => {
-            this.Update();
+        this.I = setInterval(() => {
+            if (Game.isRunning)
+                this.Update();
             this.Draw();
+            //TODO: Delta time
         }, speed);
     }
 }
 exports.Game = Game;
+Game.isRunning = true;
 Game.I = setInterval(() => { }, 1);
 Game.run = () => {
     document.querySelector('main').innerHTML = 'Game no ready';

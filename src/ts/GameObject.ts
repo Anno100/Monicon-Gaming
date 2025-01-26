@@ -1,10 +1,13 @@
-export class GameObject {
-    x: number;
-    y: number;
+import { Vector2 } from "./Vector2";
+
+export class GameObject extends Vector2 {
     color: string;
+    vector: Vector2;
     constructor(x: number, y: number, color: string) {
-        this.x = x;
-        this.y = y;
+        super(x,y);
+        this.X = x;
+        this.Y = y;
+        this.vector = new Vector2(x,y);
         this.color = color;
     }
 }
