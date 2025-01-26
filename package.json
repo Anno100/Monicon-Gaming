@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "electron-forge make && tar -a -c -f out/monicon-win32-x64.zip out/monicon-win32-x64",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },

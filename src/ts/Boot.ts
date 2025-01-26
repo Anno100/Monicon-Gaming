@@ -1,5 +1,5 @@
-import { Snake } from './Snake';
-import { Pong } from './Pong';
+import { Snake } from './Games/Snake';
+import { Pong } from './Games/Pong';
 
 const openGame = (game: string) => {
     switch(game){

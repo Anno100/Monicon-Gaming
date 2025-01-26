@@ -1,6 +1,6 @@
-import { Canvas } from './Canvas';
-import { Game } from './Game';
-import { Rect } from './Rect';
+import { Canvas } from '../lib/Canvas';
+import { Game } from '../lib/Game';
+import { Rect } from '../lib/Rect';
 
 enum Direction {
     left,

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Snake = void 0;
-const Canvas_1 = require("./Canvas");
-const Game_1 = require("./Game");
-const Rect_1 = require("./Rect");
+const Canvas_1 = require("../lib/Canvas");
+const Game_1 = require("../lib/Game");
+const Rect_1 = require("../lib/Rect");
 var Direction;
 (function (Direction) {
     Direction[Direction["left"] = 0] = "left";
