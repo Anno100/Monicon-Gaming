@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameObject = void 0;
-const Vector2_1 = require("../Vector2");
+const Vector2_1 = require("./Vector2");
 class GameObject extends Vector2_1.Vector2 {
     constructor(x, y, color) {
         super(x, y);
