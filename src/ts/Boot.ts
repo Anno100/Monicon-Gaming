@@ -1,6 +1,13 @@
 import { Snake } from './Games/Snake';
 import { Pong } from './Games/Pong';
 
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+    organization: "org-TJoOUxRmtt4VOQPMAif2sJB8",
+    project: "$PROJECT_ID",
+});
+
 const openGame = (game: string) => {
     switch(game){
         case 'Snake': Snake.run(); break;
